@@ -71,10 +71,10 @@ namespace BR.MadenIlan.Auth
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "api_product_fullpermission",
                         "api_photo_fullpermission"},
-                    AccessTokenLifetime =(int)TimeSpan.FromMinutes(5).TotalSeconds,
+                    AccessTokenLifetime =(int)TimeSpan.FromDays(7).TotalSeconds,
                     RefreshTokenUsage=TokenUsage.ReUse,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
-                    AbsoluteRefreshTokenLifetime=(int)TimeSpan.FromDays(60).TotalSeconds
+                    AbsoluteRefreshTokenLifetime=(int)TimeSpan.FromDays(30).TotalSeconds
                 },
             };
     }

@@ -32,7 +32,6 @@ namespace BR.MadenIlan.Auth
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddLocalApiAuthentication();
 
             services.AddControllersWithViews().AddFluentValidation(opt =>
@@ -43,7 +42,7 @@ namespace BR.MadenIlan.Auth
             services.AddCustomValidationResponse();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Local")));
+                options.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType())));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
             {

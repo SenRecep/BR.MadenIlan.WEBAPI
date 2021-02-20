@@ -20,28 +20,29 @@ namespace BR.MadenIlan.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IWebHostEnvironment Environment { get; }
+        public IConfiguration Configuration { get; }
+
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
+            Environment = environment;
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<AppDbContext>(OPT =>
             {
-                OPT.UseSqlServer(Configuration.GetConnectionString("Local"));
+                OPT.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType()));
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
                 {
-                    opt.Authority = "http://localhost:4456";
+                    opt.Authority = Environment.GetIdentityServerUrl(Configuration);
                     opt.Audience = "resource_product_api";
-                    opt.RequireHttpsMetadata = false;
+                    opt.RequireHttpsMetadata = !Environment.IsDevelopment();
                 });
 
 
