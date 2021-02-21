@@ -76,6 +76,38 @@ namespace BR.MadenIlan.Auth
                     RefreshTokenExpiration=TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime=(int)TimeSpan.FromDays(30).TotalSeconds
                 },
+                 new Client
+                {
+                    ClientId = "WebClient_ROP",
+                    ClientName = "Web Client ROP",
+
+                    ClientSecrets = { new Secret("madenilan_mobile_client_secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "api_product_fullpermission",
+                        "api_photo_fullpermission"},
+
+                    RedirectUris=new List<string>(){"http://localhost:44373/Home/Privacy"},
+                    PostLogoutRedirectUris=new List<string>(){"http://localhost:44373/Home/Privacy"},
+                    ClientUri="http://localhost:44373",
+                    RequirePkce=true,
+                    AllowAccessTokensViaBrowser=true,
+                    RequireConsent=false,
+                    RequireClientSecret=false,
+
+
+                    AccessTokenLifetime =(int)TimeSpan.FromDays(7).TotalSeconds,
+                    RefreshTokenUsage=TokenUsage.ReUse,
+                    RefreshTokenExpiration=TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime=(int)TimeSpan.FromDays(30).TotalSeconds
+                },
             };
     }
 }
