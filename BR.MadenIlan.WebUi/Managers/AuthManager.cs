@@ -25,42 +25,52 @@ namespace BR.MadenIlan.WebUi.Managers
             this.client = client;
             apiClient = apiClientOptions.Value;
         }
-        public async Task<Token> SignInAsync(SignInDto signInDto)
+
+        public Task<ApiResponse<Token>> SignInAsync(SignInDto signInDto)
         {
-            client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
-            var dict = new Dictionary<string, string>
-            {
-                { "client_id", apiClient.WebClient.ClientId },
-                { "client_secret", apiClient.WebClient.ClientSecret },
-                { "grant_type", apiClient.ResourceOwnerPasswordCredentialGrantType },
-                { "username", signInDto.UserName },
-                { "password", signInDto.Password }
-            };
-
-            var req = new HttpRequestMessage(HttpMethod.Post, "connect/token") { Content = new FormUrlEncodedContent(dict) };
-            var res = await client.SendAsync(req);
-
-            if (res.IsSuccessStatusCode)
-                return await res.Content.ReadFromJsonAsync<Token>();
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> SignUpAsync(SignUpDto signUpDto, string token)
+        public Task<ApiResponse<object>> SignUpAsync(SignUpDto signUpDto, string token)
         {
-            client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var json = await Task.Run(() => JsonConvert.SerializeObject(signUpDto));
-
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var res = await client.PostAsync("api/user/SignUp", httpContent);
-
-            return res.IsSuccessStatusCode;
+            throw new NotImplementedException();
         }
+        //public async Task<Token> SignInAsync(SignInDto signInDto)
+        //{
+        //    client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
+        //    var dict = new Dictionary<string, string>
+        //    {
+        //        { "client_id", apiClient.WebClient.ClientId },
+        //        { "client_secret", apiClient.WebClient.ClientSecret },
+        //        { "grant_type", apiClient.ResourceOwnerPasswordCredentialGrantType },
+        //        { "username", signInDto.UserName },
+        //        { "password", signInDto.Password }
+        //    };
 
-     
+        //    var req = new HttpRequestMessage(HttpMethod.Post, "connect/token") { Content = new FormUrlEncodedContent(dict) };
+        //    var res = await client.SendAsync(req);
+
+        //    if (res.IsSuccessStatusCode)
+        //        return await res.Content.ReadFromJsonAsync<Token>();
+
+        //    return null;
+        //}
+
+        //public async Task<bool> SignUpAsync(SignUpDto signUpDto, string token)
+        //{
+        //    client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
+
+        //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        //    var json = await Task.Run(() => JsonConvert.SerializeObject(signUpDto));
+
+        //    var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        //    var res = await client.PostAsync("api/user/SignUp", httpContent);
+
+        //    return res.IsSuccessStatusCode;
+        //}
+
+
     }
 }

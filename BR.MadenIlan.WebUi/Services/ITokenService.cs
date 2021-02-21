@@ -8,6 +8,6 @@ namespace BR.MadenIlan.WebUi.Services
     {
         Task<ApiResponse<Token>> ConnectTokenAsync();
         Task<ApiResponse<Introspect>> CheckTokenAsync(string token);
-        Task<Token> RefreshTokenAsync(string refreshToken);
+        Task<ApiResponse<Token>> RefreshTokenAsync(string refreshToken);
     }
 }

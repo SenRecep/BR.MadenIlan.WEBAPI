@@ -11,13 +11,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using BR.MadenIlan.WebUi.Services;
-using BR.MadenIlan.WebUi.Helpers;
 
 namespace BR.MadenIlan.WebUi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : APIBaseController
     {
         private readonly ITokenService tokenService;
         private readonly IAuthService authService;
@@ -31,36 +30,28 @@ namespace BR.MadenIlan.WebUi.Controllers
         [HttpGet]
         public async Task<IActionResult> IdentityConnectToken()
         {
-            var identityToken = await tokenService.ConnectTokenAsync();
-            if (identityToken is null)
-                return StatusCode(StatusCodes.Status500InternalServerError, ApiHelper.ErrorHandler());
-            return Ok(identityToken);
+            var response = await tokenService.ConnectTokenAsync();
+            return ApiResponseAction(response);
         }
 
         [HttpPost]
         public async Task<IActionResult> SignIn([FromBody]SignInDto signInDto)
         {
-            var token = await authService.SignInAsync(signInDto);
-            if (token is null)
-                return StatusCode(StatusCodes.Status500InternalServerError, ApiHelper.ErrorHandler());
-            return Ok(token);
+            var response = await authService.SignInAsync(signInDto);
+            return ApiResponseAction(response);
         }
 
-        [HttpGet()]
+        [HttpGet]
         public async Task<IActionResult> CheckToken(string access_token)
         {
-            var introspect = await tokenService.CheckTokenAsync(access_token);
-            if (introspect is null)
-                return StatusCode(StatusCodes.Status500InternalServerError,ApiHelper.ErrorHandler());
-            return Ok(introspect);
+            var response = await tokenService.CheckTokenAsync(access_token);
+            return ApiResponseAction(response);
         }
         [HttpGet]
         public async Task<IActionResult> RefreshToken(string refresh_token)
         {
-            var token = await tokenService.RefreshTokenAsync(refresh_token);
-            if (token is null)
-                return StatusCode(StatusCodes.Status500InternalServerError, ApiHelper.ErrorHandler());
-            return Ok(token);
+            var response = await tokenService.RefreshTokenAsync(refresh_token);
+            return ApiResponseAction(response);
         }
     }
 }

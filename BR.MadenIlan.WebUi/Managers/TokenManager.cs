@@ -6,6 +6,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
+using AutoMapper;
+
 using BR.MadenIlan.Web.Shared.Models;
 using BR.MadenIlan.WebUi.Services;
 
@@ -22,10 +24,12 @@ namespace BR.MadenIlan.WebUi.Managers
     public class TokenManager : ITokenService
     {
         private readonly HttpClient client;
+        private readonly IMapper mapper;
         private readonly ApiClient apiClient;
-        public TokenManager(HttpClient client, IOptions<ApiClient> apiClientOptions)
+        public TokenManager(HttpClient client, IOptions<ApiClient> apiClientOptions,IMapper mapper)
         {
             this.client = client;
+            this.mapper = mapper;
             apiClient = apiClientOptions.Value;
         }
         public async Task<ApiResponse<Token>> ConnectTokenAsync()
@@ -63,61 +67,39 @@ namespace BR.MadenIlan.WebUi.Managers
         public async Task<ApiResponse<Introspect>> CheckTokenAsync(string token)
         {
             client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
-            Dictionary<string, string> dict = new Dictionary<string, string>
-            {
-                { "token", token }
-            };
-
             client.SetBasicAuthentication(apiClient.BasicUserName, apiClient.BasicPassword);
 
-            var ress=  await client.IntrospectTokenAsync(new(){
-                Address= "connect/introspect",
-                ClientId=apiClient.WebClient.ClientId,
-                ClientSecret=apiClient.WebClient.ClientSecret,
-                Token=token
+            var res = await client.IntrospectTokenAsync(new()
+            {
+                Address = "connect/introspect",
+                ClientId = apiClient.WebClient.ClientId,
+                ClientSecret = apiClient.WebClient.ClientSecret,
+                Token = token
             });
 
-            HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "connect/introspect") { Content = new FormUrlEncodedContent(dict) };
-            string error = string.Empty;
-            HttpResponseMessage res = null;
-            try
-            {
-                res = await client.SendAsync(req);
-            }
-            catch (HttpRequestException ex) { error = ex.Message; }
-            catch (Exception ex) { error = ex.Message; }
-
-            if (!string.IsNullOrEmpty(error))
-                return new(false, null, new(false, StatusCodes.Status500InternalServerError, "TokenManager/CheckTokenAsync", error));
+            if (res.IsError)
+                return new(false, null, new(false, StatusCodes.Status500InternalServerError, "TokenManager/CheckTokenAsync", res.Error));
 
 
-            if (res.IsSuccessStatusCode)
-                return new(true, await res.Content.ReadFromJsonAsync<Introspect>());
-
-
-            return new(false, null, new(false, StatusCodes.Status400BadRequest, "TokenManager/CheckTokenAsync","Sunucuya istek atılırken hatalı bir şey oldu"));
+            return new(true, mapper.Map<Introspect>(res));
         }
 
-        public async Task<Token> RefreshTokenAsync(string refreshToken)
+        public async Task<ApiResponse<Token>> RefreshTokenAsync(string refreshToken)
         {
             client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
-            Dictionary<string, string> dict = new Dictionary<string, string>
+
+            var res = await client.RequestRefreshTokenAsync(new()
             {
-                { "client_id", apiClient.WebClient.ClientId },
-                { "client_secret", apiClient.WebClient.ClientSecret },
-                { "grant_type", apiClient.RefreshTokenCredentialGrantType },
-                { "refresh_token",  refreshToken}
-            };
+                Address = "connect/token",
+                ClientId = apiClient.WebClient.ClientId,
+                ClientSecret = apiClient.WebClient.ClientSecret,
+                RefreshToken = refreshToken
+            });
 
-            HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "connect/token") { Content = new FormUrlEncodedContent(dict) };
-            HttpResponseMessage res = await client.SendAsync(req);
+            if (res.IsError)
+                return new(false, null, new(false, StatusCodes.Status500InternalServerError, "TokenManager/RefreshTokenAsync", res.Error));
 
-            if (res.IsSuccessStatusCode)
-                return await res.Content.ReadFromJsonAsync<Token>();
-
-            return null;
+            return new(true, mapper.Map<Token>(res));
         }
-
-
     }
 }

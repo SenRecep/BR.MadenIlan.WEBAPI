@@ -6,7 +6,7 @@ namespace BR.MadenIlan.WebUi.Services
 {
     public interface IAuthService
     {
-        Task<Token> SignInAsync(SignInDto signInDto);
-        Task<bool> SignUpAsync(SignUpDto signUpDto, string token);
+        Task<ApiResponse<Token>> SignInAsync(SignInDto signInDto);
+        Task<ApiResponse<object>> SignUpAsync(SignUpDto signUpDto, string token);
     }
 }

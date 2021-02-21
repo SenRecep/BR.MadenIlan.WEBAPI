@@ -1,6 +1,7 @@
 
 using BR.MadenIlan.Web.Shared.Models;
 using BR.MadenIlan.WebUi.Managers;
+using BR.MadenIlan.WebUi.Mapping.AutoMapperProfile;
 using BR.MadenIlan.WebUi.Services;
 
 using Microsoft.AspNetCore.Authentication;
@@ -28,6 +29,11 @@ namespace BR.MadenIlan.WebUi
 
             services.AddScoped<ITokenService, TokenManager>();
             services.AddScoped<IAuthService, AuthManager>();
+
+            #region Mappers
+
+            services.AddAutoMapper(typeof(TokenProfile));                
+            #endregion
 
             services.AddHttpClient();
             #region MyRegion
@@ -77,9 +83,10 @@ namespace BR.MadenIlan.WebUi
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    name: "api",
+                    pattern: "api/{controller}/{action}/{id?}");
             });
         }
     }
