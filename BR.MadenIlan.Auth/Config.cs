@@ -17,7 +17,7 @@ namespace BR.MadenIlan.Auth
                 ApiSecrets=new []{ new Secret("product_api_secret".Sha256())}
                 },
             new ApiResource("resource_photo_api")
-            { 
+            {
                 Scopes={ "api_photo_fullpermission" },
                 ApiSecrets=new []{ new Secret("photo_api_secret".Sha256())}
             },
@@ -75,39 +75,39 @@ namespace BR.MadenIlan.Auth
                     RefreshTokenUsage=TokenUsage.ReUse,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime=(int)TimeSpan.FromDays(30).TotalSeconds
-                },
-                 new Client
-                {
-                    ClientId = "WebClient_ROP",
-                    ClientName = "Web Client ROP",
+                }
+                // new Client
+                //{
+                //    ClientId = "WebClient_ROP",
+                //    ClientName = "Web Client ROP",
 
-                    ClientSecrets = { new Secret("madenilan_mobile_client_secret".Sha256()) },
+                //    ClientSecrets = { new Secret("madenilan_mobile_client_secret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                //    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
 
-                    AllowOfflineAccess = true,
-                    AllowedScopes = {
-                        IdentityServerConstants.StandardScopes.Email,
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api_product_fullpermission",
-                        "api_photo_fullpermission"},
+                //    AllowOfflineAccess = true,
+                //    AllowedScopes = {
+                //        IdentityServerConstants.StandardScopes.Email,
+                //        IdentityServerConstants.StandardScopes.OpenId,
+                //        IdentityServerConstants.StandardScopes.Profile,
+                //        IdentityServerConstants.StandardScopes.OfflineAccess,
+                //        "api_product_fullpermission",
+                //        "api_photo_fullpermission"},
 
-                    RedirectUris=new List<string>(){"http://localhost:44373/Home/Privacy"},
-                    PostLogoutRedirectUris=new List<string>(){"http://localhost:44373/Home/Privacy"},
-                    ClientUri="http://localhost:44373",
-                    RequirePkce=true,
-                    AllowAccessTokensViaBrowser=true,
-                    RequireConsent=false,
-                    RequireClientSecret=false,
+                //    RedirectUris=new List<string>(){"http://localhost:44373/Home/Privacy"},
+                //    PostLogoutRedirectUris=new List<string>(){"http://localhost:44373/Home/Privacy"},
+                //    ClientUri="http://localhost:44373",
+                //    RequirePkce=true,
+                //    AllowAccessTokensViaBrowser=true,
+                //    RequireConsent=false,
+                //    RequireClientSecret=false,
 
 
-                    AccessTokenLifetime =(int)TimeSpan.FromDays(7).TotalSeconds,
-                    RefreshTokenUsage=TokenUsage.ReUse,
-                    RefreshTokenExpiration=TokenExpiration.Absolute,
-                    AbsoluteRefreshTokenLifetime=(int)TimeSpan.FromDays(30).TotalSeconds
-                },
+                //    AccessTokenLifetime =(int)TimeSpan.FromDays(7).TotalSeconds,
+                //    RefreshTokenUsage=TokenUsage.ReUse,
+                //    RefreshTokenExpiration=TokenExpiration.Absolute,
+                //    AbsoluteRefreshTokenLifetime=(int)TimeSpan.FromDays(30).TotalSeconds
+                //},
             };
     }
 }

@@ -8,9 +8,12 @@ namespace BR.MadenIlan.Web.Shared.Models
         {
             Errors = new List<string>();
         }
-
+         
         public ErrorDto(bool isShow,int statusCode,string path,params string[] massages)
         {
+            this.IsShow = isShow;
+            this.StatusCode = statusCode;
+            this.Path= path;
             Errors = new List<string>(massages);
         }
         public List<string> Errors { get; set; }

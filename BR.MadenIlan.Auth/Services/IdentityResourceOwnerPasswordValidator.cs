@@ -25,13 +25,15 @@ namespace BR.MadenIlan.Auth.Services
         }
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            Dictionary<string, object> errors()
+            static Dictionary<string, object> errors()
             {
-                var errors = new Dictionary<string, object>();
-                errors.Add("errors", new List<string> { "Kullanıcı adı veya parolanız hatalı" });
-                errors.Add("status", StatusCodes.Status400BadRequest);
-                errors.Add("isShow", true);
-                return errors;
+                return new Dictionary<string, object>
+                {
+                    { "errors", new List<string> { "Kullanıcı adı veya parolanız hatalı" } },
+                    { "statusCode", StatusCodes.Status400BadRequest },
+                    { "isShow", true },
+                    { "path", "api/user/signin" }
+                }; 
             }
            
             var existUser = await userManager.FindByNameAsync(context.UserName);

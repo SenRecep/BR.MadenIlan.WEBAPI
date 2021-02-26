@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4.EntityFramework.DbContexts;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +12,6 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
-using System.Linq;
 
 namespace BR.MadenIlan.Auth
 {
@@ -44,6 +45,15 @@ namespace BR.MadenIlan.Auth
                 //}
 
                 var host = CreateHostBuilder(args).Build();
+
+                //using var serviceScope = host.Services.CreateScope();
+
+                //var services = serviceScope.ServiceProvider;
+
+                //var context = services.GetRequiredService<ConfigurationDbContext>();
+
+                //IdentityServerSeedData.Seed(context).Wait();
+
 
                 //if (seed)
                 //{

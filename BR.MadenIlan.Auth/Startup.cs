@@ -1,8 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
-using BR.MadenIlan.Auth.Data;
+﻿using BR.MadenIlan.Auth.Data;
 using BR.MadenIlan.Auth.Models;
 using BR.MadenIlan.Auth.Services;
 using BR.MadenIlan.Shared.ExtensionMethods;
@@ -44,6 +40,7 @@ namespace BR.MadenIlan.Auth
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType())));
 
+
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
@@ -61,11 +58,23 @@ namespace BR.MadenIlan.Auth
 
                 options.EmitStaticAudienceClaim = true;
             })
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiResources(Config.ApiResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
+                .AddConfigurationStore(opt =>
+                    opt.ConfigureDbContext = cOpt =>
+                        cOpt.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType()), sqlOpt =>
+                            sqlOpt.MigrationsAssembly("BR.MadenIlan.Auth")
+                        )
+                )
+                .AddOperationalStore(opt =>
+                    opt.ConfigureDbContext = cOpt =>
+                        cOpt.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType()), sqlOpt =>
+                            sqlOpt.MigrationsAssembly("BR.MadenIlan.Auth")
+                        )
+                )
                 .AddAspNetIdentity<ApplicationUser>();
+                //.AddInMemoryIdentityResources(Config.IdentityResources)
+                //.AddInMemoryApiResources(Config.ApiResources)
+                //.AddInMemoryApiScopes(Config.ApiScopes)
+                //.AddInMemoryClients(Config.Clients)
 
             builder.AddDeveloperSigningCredential().AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
         }
