@@ -20,7 +20,7 @@ namespace BR.MadenIlan.Auth.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(LocalApi.ScopeName)]
+    [Authorize(LocalApi.PolicyName)]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
