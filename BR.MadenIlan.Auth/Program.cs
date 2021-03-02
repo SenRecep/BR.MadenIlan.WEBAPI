@@ -46,13 +46,13 @@ namespace BR.MadenIlan.Auth
 
                 var host = CreateHostBuilder(args).Build();
 
-                //using var serviceScope = host.Services.CreateScope();
+                using var serviceScope = host.Services.CreateScope();
 
-                //var services = serviceScope.ServiceProvider;
+                var services = serviceScope.ServiceProvider;
 
-                //var context = services.GetRequiredService<ConfigurationDbContext>();
+                var context = services.GetRequiredService<ConfigurationDbContext>();
 
-                //IdentityServerSeedData.Seed(context).Wait();
+                IdentityServerSeedData.Seed(context).Wait();
 
 
                 //if (seed)

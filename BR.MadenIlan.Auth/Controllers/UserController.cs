@@ -20,7 +20,7 @@ namespace BR.MadenIlan.Auth.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(LocalApi.PolicyName)]
+    [Authorize(LocalApi.ScopeName)]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -36,8 +36,9 @@ namespace BR.MadenIlan.Auth.Controllers
             ApplicationUser user = new ApplicationUser()
             {
                 UserName = model.UserName,
-                Email = model.Email
+                Email = model.Email,
             };
+
 
             IdentityResult result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -53,24 +54,24 @@ namespace BR.MadenIlan.Auth.Controllers
             }
             return NoContent();
         }
-        [HttpPost]
-        public async Task<IActionResult> GetUser()
-        {
-            Claim userClaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
+        //[HttpPost]
+        //public async Task<IActionResult> GetUser()
+        //{
+        //    Claim userClaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
 
-            if (userClaim.IsNull()) return BadRequest();
+        //    if (userClaim.IsNull()) return BadRequest("Kullanici girisi dogrulanamadi");
 
-            ApplicationUser user = await userManager.FindByIdAsync(userClaim.Value);
+        //    ApplicationUser user = await userManager.FindByIdAsync(userClaim.Value);
 
-            if (user.IsNull()) return BadRequest();
+        //    if (user.IsNull()) return BadRequest("Gecerli bir kullanici bulunamadi");
 
-            ApplicationUserDto dto = new ApplicationUserDto
-            {
-                Email = user.Email,
-                UserName = user.UserName
-            };
+        //    ApplicationUserDto dto = new ApplicationUserDto
+        //    {
+        //        Email = user.Email,
+        //        UserName = user.UserName
+        //    };
 
-            return Ok(dto);
-        }
+        //    return Ok(dto);
+        //}
     }
 }
