@@ -1,18 +1,22 @@
 ﻿namespace BR.MadenIlan.Web.Shared.Models
 {
-
-    //public const string AuthBaseUrl = "http://10.0.2.2:4456";
-    //public const string ApiBaseUrl = "http://10.0.2.2:4466";
-    //public const string PhotoBaseUrl = "http://10.0.2.2:4467";
     public class ApiClient
     {
-        public string AuthBaseUrl { get; set; }
-        public  string ApiBaseUrl { get; set; }
-        public  string PhotoBaseUrl { get; set; }
+        public bool IsLocal { get; set; }
 
-        public  string ClientCredentialGrantType { get; set; }
-        public  string ResourceOwnerPasswordCredentialGrantType { get; set; }
-        public  string RefreshTokenCredentialGrantType { get; set; }
+        public string GetAuthBaseUrl => IsLocal ? LocalAuthBaseUrl : AuthBaseUrl;
+
+        public string AuthBaseUrl { get; set; }
+        public string ApiBaseUrl { get; set; }
+        public string PhotoBaseUrl { get; set; }
+
+        public string LocalAuthBaseUrl { get; set; }
+        public string LocalApiBaseUrl { get; set; }
+        public string LocalPhotoBaseUrl { get; set; }
+
+        public string ClientCredentialGrantType { get; set; }
+        public string ResourceOwnerPasswordCredentialGrantType { get; set; }
+        public string RefreshTokenCredentialGrantType { get; set; }
 
         public string BasicUserName { get; set; }
         public string BasicPassword { get; set; }

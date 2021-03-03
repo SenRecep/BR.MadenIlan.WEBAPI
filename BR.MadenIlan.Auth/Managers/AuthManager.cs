@@ -32,7 +32,7 @@ namespace BR.MadenIlan.Auth.Managers
 
         public async Task<ApiResponse<Token>> SignInAsync(SignInDto signInDto)
         {
-            client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
+            client.BaseAddress = new Uri(apiClient.GetAuthBaseUrl);
             TokenResponse res = await client.RequestPasswordTokenAsync(new PasswordTokenRequest() {
                 Address = "connect/token",
                 ClientId = apiClient.WebClient.ClientId,
@@ -48,7 +48,7 @@ namespace BR.MadenIlan.Auth.Managers
 
         public async Task<ApiResponse<SuccessMessageResponse>> SignUpAsync(SignUpDto signUpDto, string token)
         {
-            client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
+            client.BaseAddress = new Uri(apiClient.GetAuthBaseUrl);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 

@@ -30,7 +30,7 @@ namespace BR.MadenIlan.Auth.Managers
 
         public async Task<ApiResponse<Token>> ConnectTokenAsync()
         {
-            client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
+            client.BaseAddress = new Uri(apiClient.GetAuthBaseUrl);
 
             TokenResponse res = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest()
             {
@@ -48,7 +48,7 @@ namespace BR.MadenIlan.Auth.Managers
 
         public async Task<ApiResponse<Introspect>> CheckTokenAsync(string token)
         {
-            client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
+            client.BaseAddress = new Uri(apiClient.GetAuthBaseUrl);
             client.SetBasicAuthentication(apiClient.BasicUserName, apiClient.BasicPassword);
 
             TokenIntrospectionResponse res = await client.IntrospectTokenAsync(new TokenIntrospectionRequest()
@@ -67,7 +67,7 @@ namespace BR.MadenIlan.Auth.Managers
 
         public async Task<ApiResponse<Token>> RefreshTokenAsync(string refreshToken)
         {
-            client.BaseAddress = new Uri(apiClient.AuthBaseUrl);
+            client.BaseAddress = new Uri(apiClient.GetAuthBaseUrl);
 
             TokenResponse res = await client.RequestRefreshTokenAsync(new RefreshTokenRequest()
             {
