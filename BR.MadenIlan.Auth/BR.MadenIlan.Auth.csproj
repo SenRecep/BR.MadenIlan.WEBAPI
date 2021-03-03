@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BR.MadenIlan.Shared\BR.MadenIlan.Shared.csproj" />
-    <ProjectReference Include="..\BR.MadenIlan.Web\Shared\BR.MadenIlan.Web.Shared.csproj" />
+    <ProjectReference Include="..\BR.MadenIlan.Web.Shared\BR.MadenIlan.Web.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
