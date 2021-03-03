@@ -1,11 +1,6 @@
-﻿
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
-using BR.MadenIlan.Auth.Dtos;
-using BR.MadenIlan.Auth.ExtensionMethods;
 using BR.MadenIlan.Auth.Models;
 using BR.MadenIlan.Shared.Models;
 
@@ -20,7 +15,7 @@ namespace BR.MadenIlan.Auth.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(LocalApi.ScopeName)]
+    [Authorize(LocalApi.PolicyName)]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
