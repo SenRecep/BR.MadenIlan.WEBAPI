@@ -29,8 +29,13 @@ namespace BR.MadenIlan.Auth
             Configuration = configuration;
         }
 
+        public string GetConnectionString() => Configuration.GetCustomConnectionString(Environment.GetConnectionType());
+
+
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = GetConnectionString();
+            var migrationName = "BR.MadenIlan.Auth";
 
             services.Configure<ApiClient>(Configuration.GetSection("ApiClient"));
             #region Mappers
@@ -53,7 +58,7 @@ namespace BR.MadenIlan.Auth
             services.AddCustomValidationResponse();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType())));
+                options.UseSqlServer(connectionString));
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
@@ -75,14 +80,14 @@ namespace BR.MadenIlan.Auth
             })
                 .AddConfigurationStore(opt =>
                     opt.ConfigureDbContext = cOpt =>
-                        cOpt.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType()), sqlOpt =>
-                            sqlOpt.MigrationsAssembly("BR.MadenIlan.Auth")
+                        cOpt.UseSqlServer(connectionString, sqlOpt =>
+                            sqlOpt.MigrationsAssembly(migrationName)
                         )
                 )
                 .AddOperationalStore(opt =>
                     opt.ConfigureDbContext = cOpt =>
-                        cOpt.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType()), sqlOpt =>
-                            sqlOpt.MigrationsAssembly("BR.MadenIlan.Auth")
+                        cOpt.UseSqlServer(connectionString, sqlOpt =>
+                            sqlOpt.MigrationsAssembly(migrationName)
                         )
                 )
                 .AddAspNetIdentity<ApplicationUser>();

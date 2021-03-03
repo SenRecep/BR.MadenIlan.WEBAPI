@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using BR.MadenIlan.Auth.ExtensionMethods;
 using BR.MadenIlan.Auth.Models;
 
 using IdentityModel;

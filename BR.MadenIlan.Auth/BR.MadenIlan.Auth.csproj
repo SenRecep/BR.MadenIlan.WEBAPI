@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ExtensionMethods\" />
     <Folder Include="StringInfos\" />
   </ItemGroup>
 </Project>

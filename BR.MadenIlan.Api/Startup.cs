@@ -29,12 +29,16 @@ namespace BR.MadenIlan.Api
             Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        public string GetConnectionString(bool test=false) => Configuration.GetCustomConnectionString(Environment.GetConnectionType(test));
+
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = GetConnectionString();
+
+
             services.AddDbContext<AppDbContext>(OPT =>
             {
-                OPT.UseSqlServer(Configuration.GetConnectionString(Environment.GetConnectionType()));
+                OPT.UseSqlServer(connectionString);
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -1,28 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using System;
+
+using BR.MadenIlan.Shared.Models;
+using BR.MadenIlan.Shared.ExtensionMethods;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
+
 namespace BR.MadenIlan.Shared.ExtensionMethods
 {
     public static class WebHostEnvironmentExtensionMethods
     {
-        public static string GetConnectionType(this IWebHostEnvironment environment, bool test = false)
+        public static ConnectionType GetConnectionType(this IWebHostEnvironment environment, bool test = false)
         {
-            var con = environment.IsDevelopment();
+            bool con = environment.IsDevelopment();
             if (test) con = !con;
-            return con ? "Local" : "Server";
+            return con ? ConnectionType.Local: ConnectionType.Server;
         }
+
+
+        public static string GetCustomConnectionString(this IConfiguration configuration, ConnectionType type)
+        {
+            var mechineName = Environment.MachineName;
+            var connectionTypeName = Enum.GetName(typeof(ConnectionType), type);
+            var result = type switch
+            {
+                ConnectionType.Server => configuration.GetConnectionString(connectionTypeName),
+                ConnectionType.Local => configuration.GetSection($"LocalConnectionStrings:{mechineName}").Get<string>(),
+                _ => throw new NotImplementedException(),
+            };
+            if (type == ConnectionType.Local && result.IsEmpty())
+                result = configuration.GetSection($"LocalConnectionStrings:Default").Get<string>();
+            return result;
+        }
+
+
         public static string GetIdentityServerUrl(this IWebHostEnvironment environment, IConfiguration configuration,bool test=false)
         {
-            var conType = environment.GetConnectionType(test);
-            var result = conType switch
+            ConnectionType conType = environment.GetConnectionType(test);
+            var connectionTypeName = Enum.GetName(typeof(ConnectionType), conType);
+            string result = conType switch
             {
-                "Server" => configuration.GetSection("IdentityServer:Server").Get<string>(),
-                _ => configuration.GetSection("IdentityServer:Local").Get<string>()
+                ConnectionType.Server => configuration.GetSection($"IdentityServer:{connectionTypeName}").Get<string>(),
+                ConnectionType.Local => configuration.GetSection($"IdentityServer:{connectionTypeName}").Get<string>(),
+                _ => throw new NotImplementedException()
             };
             return result;
         }
