@@ -1,10 +1,7 @@
 ﻿using BR.MadenIlan.Auth.Data;
-using BR.MadenIlan.Auth.Managers;
-using BR.MadenIlan.Auth.Mapping.AutoMapperProfile;
 using BR.MadenIlan.Auth.Models;
 using BR.MadenIlan.Auth.Services;
 using BR.MadenIlan.Shared.ExtensionMethods;
-using BR.MadenIlan.Web.Shared.Models;
 
 using FluentValidation.AspNetCore;
 
@@ -37,16 +34,6 @@ namespace BR.MadenIlan.Auth
             var connectionString = GetConnectionString();
             var migrationName = "BR.MadenIlan.Auth";
 
-            services.Configure<ApiClient>(Configuration.GetSection("ApiClient"));
-            #region Mappers
-
-            services.AddAutoMapper(typeof(TokenProfile));
-            services.AddAutoMapper(typeof(IntrospectProfile));
-            #endregion
-
-
-            services.AddHttpClient<ITokenService, TokenManager>();
-            services.AddHttpClient<IAuthService, AuthManager>();
 
             services.AddLocalApiAuthentication();
 
@@ -96,7 +83,9 @@ namespace BR.MadenIlan.Auth
             //.AddInMemoryApiScopes(Config.ApiScopes)
             //.AddInMemoryClients(Config.Clients)
 
-            builder.AddDeveloperSigningCredential().AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
+            builder.AddDeveloperSigningCredential()
+                .AddProfileService<CustomProfileService>()
+                .AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
         }
 
         public void Configure(IApplicationBuilder app)

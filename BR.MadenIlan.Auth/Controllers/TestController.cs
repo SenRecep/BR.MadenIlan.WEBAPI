@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 using BR.MadenIlan.Auth.Models;
-using BR.MadenIlan.Web.Shared.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

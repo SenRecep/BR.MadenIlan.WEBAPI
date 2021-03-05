@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.1" />
     <PackageReference Include="IdentityModel" Version="5.0.1" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
@@ -27,11 +26,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BR.MadenIlan.Shared\BR.MadenIlan.Shared.csproj" />
-    <ProjectReference Include="..\BR.MadenIlan.Web.Shared\BR.MadenIlan.Web.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ExtensionMethods\" />
-    <Folder Include="StringInfos\" />
   </ItemGroup>
 </Project>

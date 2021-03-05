@@ -1,0 +1,8 @@
+﻿update-database -context ApplicationDbContext
+update-database -context PersistedGrantDbContext
+update-database -context ConfigurationDbContext
+
+
+drop-database -context ApplicationDbContext
+drop-database -context PersistedGrantDbContext
+drop-database -context ConfigurationDbContext

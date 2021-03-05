@@ -8,10 +8,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BR.MadenIlan.Auth
 {
@@ -26,44 +31,24 @@ namespace BR.MadenIlan.Auth
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                // uncomment to write to Azure diagnostics stream
-                //.WriteTo.File(
-                //    @"D:\home\LogFiles\Application\identityserver.txt",
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
 
             try
             {
-                //var seed = args.Contains("/seed");
-                //if (seed)
-                //{
-                //    args = args.Except(new[] { "/seed" }).ToArray();
-                //}
-
                 var host = CreateHostBuilder(args).Build();
 
                 using var serviceScope = host.Services.CreateScope();
 
                 var services = serviceScope.ServiceProvider;
 
-                var context = services.GetRequiredService<ConfigurationDbContext>();
+                var configurationDbContext = services.GetRequiredService<ConfigurationDbContext>();
+                var tasks = new List<Task>();
 
-                IdentityServerSeedData.Seed(context).Wait();
+                tasks.Add(IdentityServerSeedData.SeedConfiguration(configurationDbContext));
+                tasks.Add(IdentityServerSeedData.SeedUserData(services));
 
-
-                //if (seed)
-                //{
-                //    Log.Information("Seeding database...");
-                //    var config = host.Services.GetRequiredService<IConfiguration>();
-                //    var connectionString = config.GetConnectionString("Local");
-                //    SeedData.EnsureSeedData(connectionString);
-                //    Log.Information("Done seeding database.");
-                //    return 0;
-                //}
+                Task.WhenAll(tasks).Wait();
 
                 Log.Information("Starting host...");
                 host.Run();

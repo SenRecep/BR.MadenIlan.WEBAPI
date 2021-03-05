@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using BR.MadenIlan.Auth.Services;
+
 using IdentityServer4;
 using IdentityServer4.Models;
 
@@ -30,16 +32,13 @@ namespace BR.MadenIlan.Auth
                 new ApiScope("api_photo_fullpermission","PHOTO API ICIN TUM IZINLER"),
                new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
-
         public static IEnumerable<IdentityResource> IdentityResources =>
             new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new ProfileWithRoleIdentityResource(),
                 new IdentityResources.Email()
             };
-
-
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
@@ -70,7 +69,9 @@ namespace BR.MadenIlan.Auth
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "api_product_fullpermission",
-                        "api_photo_fullpermission"},
+                        "api_photo_fullpermission",
+                        "Roles"
+                    },
                     AccessTokenLifetime =(int)TimeSpan.FromDays(7).TotalSeconds,
                     RefreshTokenUsage=TokenUsage.ReUse,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
