@@ -13,6 +13,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -65,12 +66,15 @@ namespace BR.MadenIlan.Clients.Shared.Containers.MicrosoftIOC
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
+            services.AddHttpClient();
+
             services.AddHttpClient<IApiResourceHttpClient, ApiResourceHttpClient>();
             services.AddHttpClient<ITokenService, TokenManager>();
             services.AddHttpClient<IAuthService, AuthManager>();
-            //services.AddDistributedMemoryCache();
+
+            services.AddDistributedMemoryCache();
             //services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));
-            
+
         }
         public static void AddAttributeDependencies(this IServiceCollection services)
         {

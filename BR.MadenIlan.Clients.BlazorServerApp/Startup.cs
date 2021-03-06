@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using BR.MadenIlan.Clients.BlazorServerApp.Data;
 using BR.MadenIlan.Clients.Shared.Containers.MicrosoftIOC;
 
 using Microsoft.AspNetCore.Builder;
@@ -30,7 +29,7 @@ namespace BR.MadenIlan.Clients.BlazorServerApp
             services.AddAllDependencies(Configuration);
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -50,6 +49,8 @@ namespace BR.MadenIlan.Clients.BlazorServerApp
 
             app.UseRouting();
 
+            app.UseCookiePolicy();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -57,6 +58,7 @@ namespace BR.MadenIlan.Clients.BlazorServerApp
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

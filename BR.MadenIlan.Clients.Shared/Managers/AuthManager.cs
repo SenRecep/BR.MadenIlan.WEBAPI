@@ -107,7 +107,9 @@ namespace BR.MadenIlan.Clients.Shared.Managers
                     Value= DateTime.UtcNow.AddSeconds(token.ExpiresIn).ToString("o", CultureInfo.InvariantCulture)}
             });
 
+
             await httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authenticationProperties);
+
             ApiResponse<SuccessMessageResponse> result = new(true, new("Kullanici Giris islemi basari ile gerceklesti"));
             logger.LogApiResponse(result);
             return result;
