@@ -13,24 +13,30 @@ namespace BR.MadenIlan.Clients.BlazorServerApp.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService authService;
+        private readonly ITokenService tokenService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ITokenService tokenService)
         {
             this.authService = authService;
+            this.tokenService = tokenService;
         }
+
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await authService.SignOutAsync();
             return Redirect("/");
         }
 
+        [HttpGet]
         public IActionResult Login(string ReturnUrl)
         {
-            var usr = User;
             ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(SignInDTO signInDTO)
         {
             if (!ModelState.IsValid)
@@ -45,6 +51,30 @@ namespace BR.MadenIlan.Clients.BlazorServerApp.Controllers
                 return View(signInDTO);
             }
             return Redirect("/");
+        }
+
+
+        [HttpGet]
+        public IActionResult Register() => View();
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(SignUpDTO signUpDTO)
+        {
+            if (!ModelState.IsValid)
+                return View(signUpDTO);
+
+            var token = await tokenService.ConnectTokenAsync();
+            var res = await authService.SignUpAsync(signUpDTO, token.Success.AccessToken);
+
+            if (!res.IsSuccessful)
+            {
+                ViewBag.ErrorMessage = res.GetErrors();
+                return View(signUpDTO);
+            }
+            return RedirectToAction("Login");
         }
     }
 }

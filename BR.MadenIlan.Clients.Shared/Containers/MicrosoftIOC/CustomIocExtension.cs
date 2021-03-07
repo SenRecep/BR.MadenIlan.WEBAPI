@@ -59,7 +59,8 @@ namespace BR.MadenIlan.Clients.Shared.Containers.MicrosoftIOC
         }
         public static void AddValidationDependencies(this IServiceCollection services)
         {
-            services.AddTransient<IValidator<SignInDTO>, SignInDtoValidation>();
+            services.AddTransient<IValidator<SignInDTO>, SignInDtoValidator>();
+            services.AddTransient<IValidator<SignUpDTO>, SignUpDtoValidator>();
         }
         public static void AddServicesDependencies(this IServiceCollection services)
         {

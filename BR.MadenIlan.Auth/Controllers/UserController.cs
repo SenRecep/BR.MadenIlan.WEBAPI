@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using BR.MadenIlan.Auth.Models;
+using BR.MadenIlan.Core.StringInfo;
 using BR.MadenIlan.Shared.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,20 @@ namespace BR.MadenIlan.Auth.Controllers
                     Path= "api/User/SignUp"
                 };
                 errorDto.Errors.AddRange(result.Errors.Select(x => x.Description));
+                return BadRequest(errorDto);
+            }
+
+            var roleResult = await userManager.AddToRoleAsync(user,RoleInfo.Customer);
+
+            if (!roleResult.Succeeded)
+            {
+                ErrorDto errorDto = new ErrorDto()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    IsShow = true,
+                    Path = "api/User/SignUp_AddRole"
+                };
+                errorDto.Errors.AddRange(roleResult.Errors.Select(x => x.Description));
                 return BadRequest(errorDto);
             }
             return NoContent();

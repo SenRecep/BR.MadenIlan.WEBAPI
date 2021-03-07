@@ -27,9 +27,9 @@ namespace BR.MadenIlan.Clients.BlazorServerApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAllDependencies(Configuration);
-            services.AddRazorPages();
+            services.AddRazorPages().AddCustomControllerServices();
             services.AddServerSideBlazor();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddCustomControllerServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
