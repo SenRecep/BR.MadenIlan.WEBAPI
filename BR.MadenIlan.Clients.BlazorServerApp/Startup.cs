@@ -17,24 +17,26 @@ namespace BR.MadenIlan.Clients.BlazorServerApp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration,IWebHostEnvironment hostEnvironment)
         {
             Configuration = configuration;
+            HostEnvironment = hostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment HostEnvironment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAllDependencies(Configuration);
+            services.AddAllDependencies(Configuration, HostEnvironment);
             services.AddRazorPages().AddCustomControllerServices();
             services.AddServerSideBlazor();
             services.AddControllersWithViews().AddCustomControllerServices();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (HostEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }

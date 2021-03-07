@@ -29,6 +29,18 @@ namespace BR.MadenIlan.Auth.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                ErrorDto errorDto = new ErrorDto()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    IsShow = true,
+                    Path = "api/User/SignUp"
+                };
+                errorDto.Errors.Add("Model not valid");
+                return BadRequest(errorDto);
+            }
+
             ApplicationUser user = new ApplicationUser()
             {
                 UserName = model.UserName,

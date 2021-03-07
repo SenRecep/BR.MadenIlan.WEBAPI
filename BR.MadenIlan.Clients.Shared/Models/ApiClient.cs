@@ -5,6 +5,8 @@
         public bool IsLocal { get; set; }
 
         public string GetAuthBaseUrl => IsLocal ? LocalAuthBaseUrl : AuthBaseUrl;
+        public string GetApiBaseUrl => IsLocal ? LocalApiBaseUrl : ApiBaseUrl;
+        public string GetPhotoBaseUrl => IsLocal ? LocalPhotoBaseUrl : PhotoBaseUrl;
 
         public string AuthBaseUrl { get; set; }
         public string ApiBaseUrl { get; set; }

@@ -49,16 +49,3 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-
-.screen-centered {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-    .screen-centered form {
-        padding: 30px 50px;
-        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-    }

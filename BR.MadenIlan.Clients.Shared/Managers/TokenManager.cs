@@ -39,7 +39,6 @@ namespace BR.MadenIlan.Clients.Shared.Managers
             this.logger = logger;
             this.httpContextAccessor = httpContextAccessor;
             apiClient = apiClientOptions.Value;
-            client.BaseAddress = new Uri(apiClient.GetAuthBaseUrl);
         }
 
         public async Task<ApiResponse<Token>> ConnectTokenAsync()

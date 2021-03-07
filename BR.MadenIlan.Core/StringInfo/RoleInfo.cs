@@ -6,5 +6,6 @@ namespace BR.MadenIlan.Core.StringInfo
         public const string Developer = "Developer";
         public const string Admin = "Admin";
         public const string Customer = "Customer";
+        public const string DeveloperOrAdmin = "Developer,Admin";
     }
 }

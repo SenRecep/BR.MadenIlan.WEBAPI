@@ -48,7 +48,6 @@ namespace BR.MadenIlan.Clients.Shared.Managers
             this.httpContextAccessor = httpContextAccessor;
             this.logger = logger;
             apiClient = apiClientOptions.Value;
-            client.BaseAddress = new Uri(apiClient.GetAuthBaseUrl);
         }
 
         public async Task<ApiResponse<IEnumerable<Claim>>> GetUserInfoAsync(string access_token)
@@ -89,6 +88,7 @@ namespace BR.MadenIlan.Clients.Shared.Managers
             ApiResponse<IEnumerable<Claim>> userInfoResponse = await GetUserInfoAsync(token.AccessToken);
             if (!userInfoResponse.IsSuccessful)
                 return new(false, null, tokenResponse.Fail);
+
             IEnumerable<Claim> userInfos = userInfoResponse.Success;
 
             ClaimsPrincipal claimsPrincipal = new(new ClaimsIdentity(

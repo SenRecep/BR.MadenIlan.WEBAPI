@@ -1,8 +1,9 @@
 ﻿using System;
-
+using System.Security.Policy;
 
 using BR.MadenIlan.Auth.Mapping.AutoMapperProfile;
 using BR.MadenIlan.Clients.Shared.DTOs.Auth;
+using BR.MadenIlan.Clients.Shared.Interceptors;
 using BR.MadenIlan.Clients.Shared.Managers;
 using BR.MadenIlan.Clients.Shared.Mapping.AutoMapperProfile;
 using BR.MadenIlan.Clients.Shared.Models;
@@ -14,22 +15,24 @@ using FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace BR.MadenIlan.Clients.Shared.Containers.MicrosoftIOC
 {
     public static class CustomIocExtension
     {
-        public static void AddAllDependencies(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAllDependencies(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment hostEnvironment)
         {
             services.AddDependencies(configuration);
             services.AddAuthDependencies();
             services.AddMapperDependencies();
             services.AddValidationDependencies();
-            services.AddServicesDependencies();
+            services.AddServicesDependencies(configuration, hostEnvironment);
             services.AddAttributeDependencies();
             services.AddHelperDependencies();
         }
@@ -47,7 +50,6 @@ namespace BR.MadenIlan.Clients.Shared.Containers.MicrosoftIOC
 
         }
 
-
         public static void AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ApiClient>(configuration.GetSection("ApiClient"));
@@ -62,16 +64,32 @@ namespace BR.MadenIlan.Clients.Shared.Containers.MicrosoftIOC
             services.AddTransient<IValidator<SignInDTO>, SignInDtoValidator>();
             services.AddTransient<IValidator<SignUpDTO>, SignUpDtoValidator>();
         }
-        public static void AddServicesDependencies(this IServiceCollection services)
+        public static void AddServicesDependencies(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment hostEnvironment)
         {
+            var apiClient = configuration.GetSection("ApiClient").Get<ApiClient>();
+            apiClient.IsLocal = hostEnvironment.IsDevelopment();
+
+            var authUrl= new Uri(apiClient.GetAuthBaseUrl);
+            var apiUrl = new Uri(apiClient.GetApiBaseUrl);
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddHttpClient();
 
-            services.AddHttpClient<IApiResourceHttpClient, ApiResourceHttpClient>();
-            services.AddHttpClient<ITokenService, TokenManager>();
-            services.AddHttpClient<IAuthService, AuthManager>();
+            services.AddScoped<RequestLoggerInterceptor>();
+            services.AddScoped<TokenInterceptor>();
+            services.AddScoped<NetworkInterceptor>();
+
+            services.AddHttpClient<IApiResourceHttpClient, ApiResourceHttpClient>(conf => conf.BaseAddress = apiUrl)
+                .AddHttpMessageHandler<RequestLoggerInterceptor>()
+                .AddHttpMessageHandler<NetworkInterceptor>()
+                .AddHttpMessageHandler<TokenInterceptor>();
+
+            services.AddHttpClient<ITokenService, TokenManager>(conf=> conf.BaseAddress = authUrl);
+            services.AddHttpClient<IAuthService, AuthManager>(conf => conf.BaseAddress = authUrl);
+
+            services.AddScoped<IProductService, ProductManager>();
 
             services.AddDistributedMemoryCache();
             //services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));

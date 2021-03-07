@@ -1,5 +1,28 @@
-﻿@page "/"
-@attribute [Authorize(Roles =RoleInfo.Customer)]
+﻿@page "/{message}"
+@attribute [Authorize]
 
+<AuthorizeView Roles="@RoleInfo.DeveloperOrAdmin">
+    <Authorized>
+        <h4>Hosgeldin Developer</h4>
+    </Authorized>
+</AuthorizeView>
+
+
+<AuthorizeView Roles="@RoleInfo.Customer">
+    <Authorized>
+        <h4>Hosgeldin Customer</h4>
+    </Authorized>
+
+</AuthorizeView>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+
+
+@code{
+    [Parameter]
+    public string Message { get; set; }
+
+
+
+}

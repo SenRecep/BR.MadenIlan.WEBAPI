@@ -42,7 +42,7 @@ namespace BR.MadenIlan.Clients.Shared.ExtensionMethods
                 logger.LogInformation(res.Message);
             if (!apiResponse.IsSuccessful)
             {
-                    var errors = string.Join("/n", apiResponse.Fail.Errors);
+                var errors = apiResponse.GetErrors("/n");
                 if (apiResponse.Fail.StatusCode == StatusCodes.Status500InternalServerError)
                     logger.LogError(errors);
                 else
