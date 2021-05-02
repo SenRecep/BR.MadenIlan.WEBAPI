@@ -1,0 +1,14 @@
+﻿@DisplayValue
+
+@code {
+
+    public string DisplayValue { get { return CheckObject is not null ? UsedObject.ToString() : LoadingMessage; } }
+
+    [Parameter]
+    public object CheckObject { get; set; }
+    [Parameter]
+    public object UsedObject { get; set; }
+    [Parameter]
+    public string LoadingMessage { get; set; } = "Loading...";
+ 
+}

@@ -47,7 +47,6 @@ namespace BR.MadenIlan.Auth.Controllers
                 Email = model.Email,
             };
 
-
             IdentityResult result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {

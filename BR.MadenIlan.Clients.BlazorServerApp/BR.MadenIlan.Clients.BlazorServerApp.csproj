@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>d3b09de4-7ab7-4d29-b451-aa5093821a99</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\" />
     <Folder Include="Data\" />
   </ItemGroup>
 

@@ -29,8 +29,9 @@ namespace BR.MadenIlan.Clients.BlazorServerApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string ReturnUrl)
+        public async Task<IActionResult> Login(string ReturnUrl)
         {
+            await authService.SignOutAsync();
             ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }

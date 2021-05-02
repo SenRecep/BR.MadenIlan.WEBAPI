@@ -9,5 +9,6 @@ namespace BR.MadenIlan.Clients.Shared.Services
         Task<ApiResponse<Token>> ConnectTokenAsync();
         Task<ApiResponse<Introspect>> CheckTokenAsync(string token);
         Task<ApiResponse<Token>> RefreshTokenAsync(string refreshToken);
+        Task<ApiResponse<SuccessMessageResponse>> RefreshTokenSignInAsync(string refreshToken);
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using BR.MadenIlan.Clients.BlazorServerApp.Managers;
 using BR.MadenIlan.Clients.Shared.Containers.MicrosoftIOC;
+using BR.MadenIlan.Clients.Shared.Services;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -29,6 +31,9 @@ namespace BR.MadenIlan.Clients.BlazorServerApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAllDependencies(Configuration, HostEnvironment);
+
+            services.AddScoped<INavigationService,CustomNavigationManager>();
+
             services.AddRazorPages().AddCustomControllerServices();
             services.AddServerSideBlazor();
             services.AddControllersWithViews().AddCustomControllerServices();

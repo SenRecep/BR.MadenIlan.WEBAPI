@@ -1,23 +1,31 @@
 ﻿@page "/counter"
 @attribute [Authorize]
 @inject IProductService service
+@inject INavigationService navigationService
 <h1>Counter</h1>
 
 <p>Current count: @currentCount</p>
 
+
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 
-<h1>Count: @products?.Count</h1>
+<h1>Count: <LoadingObject CheckObject="products" UsedObject="products?.Count" LoadingMessage="Ürün Sayısı Yükleniyor..." /></h1>
 
 @code {
     private int currentCount = 0;
     private List<ProductDTO> products;
 
+
     protected override async Task OnInitializedAsync()
     {
-        products = await service.GetProducts();
+        var productsResponse = await service.GetProductsAsync();
+        if (productsResponse.IsSuccessful)
+            products = productsResponse.Success;
+        else
+            navigationService.NavigateLogin(productsResponse);
     }
+
     private void IncrementCount()
     {
         currentCount++;

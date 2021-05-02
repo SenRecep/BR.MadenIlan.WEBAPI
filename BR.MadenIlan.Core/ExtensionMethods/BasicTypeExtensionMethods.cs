@@ -1,4 +1,4 @@
-﻿namespace BR.MadenIlan.Shared.ExtensionMethods
+﻿namespace BR.MadenIlan.Core.ExtensionMethods
 {
     public static class BasicTypeExtensionMethods
     {

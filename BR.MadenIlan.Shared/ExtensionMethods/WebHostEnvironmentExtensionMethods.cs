@@ -1,13 +1,12 @@
 ﻿
 using System;
 
+using BR.MadenIlan.Core.ExtensionMethods;
 using BR.MadenIlan.Shared.Models;
-using BR.MadenIlan.Shared.ExtensionMethods;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-
 
 namespace BR.MadenIlan.Shared.ExtensionMethods
 {
@@ -23,9 +22,9 @@ namespace BR.MadenIlan.Shared.ExtensionMethods
 
         public static string GetCustomConnectionString(this IConfiguration configuration, ConnectionType type)
         {
-            var mechineName = Environment.MachineName;
-            var connectionTypeName = Enum.GetName(typeof(ConnectionType), type);
-            var result = type switch
+            string mechineName = Environment.MachineName;
+            string connectionTypeName = Enum.GetName(typeof(ConnectionType), type);
+            string result = type switch
             {
                 ConnectionType.Server => configuration.GetConnectionString(connectionTypeName),
                 ConnectionType.Local => configuration.GetSection($"LocalConnectionStrings:{mechineName}").Get<string>(),
@@ -40,7 +39,7 @@ namespace BR.MadenIlan.Shared.ExtensionMethods
         public static string GetIdentityServerUrl(this IWebHostEnvironment environment, IConfiguration configuration,bool test=false)
         {
             ConnectionType conType = environment.GetConnectionType(test);
-            var connectionTypeName = Enum.GetName(typeof(ConnectionType), conType);
+            string connectionTypeName = Enum.GetName(typeof(ConnectionType), conType);
             string result = conType switch
             {
                 ConnectionType.Server => configuration.GetSection($"IdentityServer:{connectionTypeName}").Get<string>(),
